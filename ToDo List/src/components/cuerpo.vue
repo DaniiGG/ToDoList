@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {  query, where } from "firebase/firestore";
 import { formatDistanceToNow } from 'date-fns';
 import esLocale from 'date-fns/locale/es';
+import { ref } from 'vue'
 
 
 let usuario = getAuth().currentUser
@@ -84,7 +85,22 @@ function tiempoTranscurridoDesdePublicacion(hora) {
   }
 
   return formatDistanceToNow(fechaPublicacion, { addSuffix: true, locale: esLocale });
+
 }
+
+  function getColorForPriority(prioridad) {
+  switch (prioridad) {
+    case 'Alta':
+      return 'red';
+    case 'Media':
+      return 'orange';
+    case 'Baja':
+      return 'blue';
+    default:
+      return 'black'; // Color por defecto o cualquier otro valor que desees
+  }
+}
+
 
 
 </script>
@@ -107,7 +123,10 @@ function tiempoTranscurridoDesdePublicacion(hora) {
         <span>Terminada</span>
         </label>
         <p :style="{ 'text-decoration': todo.hecho ? 'line-through' : 'none' }">Titulo: {{ todo.titulo }}</p>
-        <p :style="{ 'text-decoration': todo.hecho ? 'line-through' : 'none' }">Prioridad: {{ todo.prioridad }}</p>
+        <p>Prioridad:  <span :style="{ 'text-decoration': todo.hecho ? 'line-through' : 'none', 'color': getColorForPriority(todo.prioridad) }">
+         {{ todo.prioridad }}
+        </span>
+        </p>
         <p class="mayus" :style="{ 'text-decoration': todo.hecho ? 'line-through' : 'none' }">{{ tiempoTranscurridoDesdePublicacion(todo.fecha) }}</p>
 
 
